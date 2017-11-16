@@ -1,6 +1,6 @@
 package java8.ex04;
 
-
+import java8.data.Account;
 import java8.data.Data;
 import java8.data.Person;
 import org.junit.Test;
@@ -10,118 +10,149 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Exercice 04 - FuncCollection
- * Exercice synthèse des exercices précédents
+ * Exercice 04 - FuncCollection Exercice synthèse des exercices précédents
  */
 public class Lambda_04_Test {
 
-    // tag::interfaces[]
-    interface GenericPredicate<T> {
-        // TODO
-    }
+	// tag::interfaces[]
+	interface GenericPredicate<T> {
+		// TODO
+		boolean test(T t);
+	}
 
-    interface GenericMapper<T, E> {
-        // TODO
-    }
+	interface GenericMapper<T, E> {
+		// TODO
+		E map(T t);
+	}
 
-    interface Processor<T> {
-        // TODO
-    }
-    // end::interfaces[]
+	interface Processor<T> {
+		// TODO
+		void process(T t);
+	}
+	// end::interfaces[]
 
-    // tag::FuncCollection[]
-    class FuncCollection<T> {
+	// tag::FuncCollection[]
+	class FuncCollection<T> {
 
-        private Collection<T> list = new ArrayList<>();
+		private Collection<T> list = new ArrayList<>();
 
-        public void add(T a) {
-            list.add(a);
-        }
+		public void add(T a) {
+			list.add(a);
+		}
 
-        public void addAll(Collection<T> all) {
-            for(T el:all) {
-                list.add(el);
-            }
-        }
-    // end::FuncCollection[]
+		public void addAll(Collection<T> all) {
+			for (T el : all) {
+				list.add(el);
+			}
+		}
+		// end::FuncCollection[]
 
-        // tag::methods[]
-        private FuncCollection<T> filter(GenericPredicate<T> predicate) {
-            FuncCollection<T> result = new FuncCollection<>();
-            // TODO
-            return result;
-        }
+		// tag::methods[]
+		private FuncCollection<T> filter(GenericPredicate<T> predicate) {
+			FuncCollection<T> result = new FuncCollection<>();
+			for (T item : list) {
+				if (predicate.test(item)) {
+					result.add(item);
+				}
+			}
+			return result;
+		}
 
-        private <E> FuncCollection<E> map(GenericMapper<T, E> mapper) {
-            FuncCollection<E> result = new FuncCollection<>();
-            // TODO
-            return result;
-        }
+		private <E> FuncCollection<E> map(GenericMapper<T, E> mapper) {
+			FuncCollection<E> result = new FuncCollection<>();
 
-        private void forEach(Processor<T> processor) {
-           // TODO
-        }
-        // end::methods[]
+			for (T m : list) {
 
-    }
+				if (m != null) {
 
+					result.add(mapper.map(m));
 
+				}
+			}
 
-    // tag::test_filter_map_forEach[]
-    @Test
+			return result;
+		}
+
+		private void forEach(Processor<T> processor) {
+			// TODO
+			for (T p : list) {
+
+				processor.process(p);
+
+			}
+
+		}
+		// end::methods[]
+
+	}
+
+	// tag::test_filter_map_forEach[]
+	@Test
     public void test_filter_map_forEach() throws Exception {
 
         List<Person> personList = Data.buildPersonList(100);
         FuncCollection<Person> personFuncCollection = new FuncCollection<>();
         personFuncCollection.addAll(personList);
-
-        personFuncCollection
-                // TODO filtrer, ne garder uniquement que les personnes ayant un age > 50
+        personFuncCollection 
+        
+        
+        
+       // TODO filtrer, ne garder uniquement que les personnes ayant un age > 50
        
-                .filter(null)
-                // TODO transformer la liste de personnes en liste de comptes. Un compte a par défaut un solde à 1000.
-                .map(null)
+        
+       
+        
+                .filter(p-> p.getAge()>50)
+        
+        // TODO transformer la liste de personnes en liste de comptes. Un compte a par défaut un solde à 1000.
+        
+            
+               .map(p-> {   Account ac = new Account() ;
+                			ac.setOwner(p);
+                			ac.setBalance(100);
+                			return ac;})
                 // TODO vérifier que chaque compte a un solde à 1000.
                 // TODO vérifier que chaque titulaire de compte a un age > 50
-                .forEach(null);
+              
+              
+       
+                .forEach(c -> { assert   c.getOwner().getAge()>50 && c.getBalance() ==1000; } );
 
         // TODO à supprimer
-        assert false;
+      //  assert false;
     }
-    // end::test_filter_map_forEach[]
+	// end::test_filter_map_forEach[]
 
-    // tag::test_filter_map_forEach_with_vars[]
-    @Test
-    public void test_filter_map_forEach_with_vars() throws Exception {
+	// tag::test_filter_map_forEach_with_vars[]
+	@Test
+	public void test_filter_map_forEach_with_vars() throws Exception {
 
-        List<Person> personList = Data.buildPersonList(100);
-        FuncCollection<Person> personFuncCollection = new FuncCollection<>();
-        personFuncCollection.addAll(personList);
+		List<Person> personList = Data.buildPersonList(100);
+		FuncCollection<Person> personFuncCollection = new FuncCollection<>();
+		personFuncCollection.addAll(personList);
 
-        // TODO créer un variable filterByAge de type GenericPredicate
-        // TODO filtrer, ne garder uniquement que les personnes ayant un age > 50
-        // ??? filterByAge = ???;
+		// TODO créer un variable filterByAge de type GenericPredicate
+		// TODO filtrer, ne garder uniquement que les personnes ayant un age > 50
+		// ??? filterByAge = ???;
 
-        // TODO créer un variable mapToAccount de type GenericMapper
-        // TODO transformer la liste de personnes en liste de comptes. Un compte a par défaut un solde à 1000.
-        // ??? mapToAccount = ???;
+		// TODO créer un variable mapToAccount de type GenericMapper
+		// TODO transformer la liste de personnes en liste de comptes. Un compte a par
+		// défaut un solde à 1000.
+		// ??? mapToAccount = ???;
 
-        // TODO créer un variable verifyAccount de type GenericMapper
-        // TODO vérifier que chaque compte a un solde à 1000.
-        // TODO vérifier que chaque titulaire de compte a un age > 50
-        // ??? verifyAccount = ???;
+		// TODO créer un variable verifyAccount de type GenericMapper
+		// TODO vérifier que chaque compte a un solde à 1000.
+		// TODO vérifier que chaque titulaire de compte a un age > 50
+		// ??? verifyAccount = ???;
 
-        /* TODO Décommenter
-        personFuncCollection
-                .filter(filterByAge)
-                .map(mapToAccount)
-                .forEach(verifyAccount);
-        */
+		/*
+		 * TODO Décommenter personFuncCollection .filter(filterByAge) .map(mapToAccount)
+		 * .forEach(verifyAccount);
+		 */
 
-        // TODO A supprimer
-        assert false;
-    }
-    // end::test_filter_map_forEach_with_vars[]
-
+		// TODO A supprimer
+		// assert false;
+	}
+	// end::test_filter_map_forEach_with_vars[]
 
 }
