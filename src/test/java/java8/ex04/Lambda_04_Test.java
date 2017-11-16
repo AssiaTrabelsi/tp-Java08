@@ -77,6 +77,7 @@ public class Lambda_04_Test {
 
         personFuncCollection
                 // TODO filtrer, ne garder uniquement que les personnes ayant un age > 50
+       
                 .filter(null)
                 // TODO transformer la liste de personnes en liste de comptes. Un compte a par défaut un solde à 1000.
                 .map(null)
