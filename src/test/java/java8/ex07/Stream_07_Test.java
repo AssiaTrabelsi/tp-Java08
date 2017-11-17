@@ -28,7 +28,7 @@ public class Stream_07_Test {
     private class Accumulator {
         private long total;
 
-        private void add(long value) {
+        private synchronized void add(long value) {
             total += value;
         }
     }
